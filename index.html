@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURELIUS | Bespoke Suits & Artisanal Footwear</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#0c0d0e',
+              charcoal: '#16181a',
+              stone: '#24272b',
+              gold: '#c5a059',
+              goldHover: '#b38d44',
+              cream: '#f9f8f6'
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Flutterwave Inline Payment SDK -->
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0c0d0e; color: #f9f8f6; }
+    .heading-font { font-family: 'Cinzel', serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0c0d0e; }
+    ::-webkit-scrollbar-thumb { background: #24272b; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c5a059; }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-gold selection:text-brand-black">
+
+  <!-- TOP ANNOUNCEMENT BAR -->
+  <div class="bg-brand-gold text-brand-black text-xs font-semibold tracking-widest text-center py-2 px-4 uppercase">
+    Complimentary Worldwide Express Delivery on Orders Over $500 • Bespoke Tailoring Guaranteed
+  </div>
+
+  <!-- NAVIGATION -->
+  <header class="sticky top-0 z-40 bg-brand-black/90 backdrop-blur-md border-b border-brand-stone/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Mobile Menu Button -->
+      <button onclick="toggleMobileNav()" class="md:hidden text-zinc-300 hover:text-brand-gold p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 border border-brand-gold flex items-center justify-center text-brand-gold font-bold heading-font text-xl">A</div>
+        <a href="#" class="heading-font text-2xl font-bold tracking-widest text-white hover:text-brand-gold transition-colors">AURELIUS</a>
+      </div>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wider text-zinc-300">
+        <a href="#catalog" onclick="filterCatalog('suits')" class="hover:text-brand-gold transition-colors">SUITS & TUXEDOS</a>
+        <a href="#catalog" onclick="filterCatalog('shoes')" class="hover:text-brand-gold transition-colors">HANDMADE FOOTWEAR</a>
+        <a href="#bespoke" class="hover:text-brand-gold transition-colors">THE ATELIER</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-4">
+        <!-- Cart Bag Trigger -->
+        <button onclick="toggleCartDrawer(true)" class="relative flex items-center gap-2 bg-brand-charcoal hover:bg-brand-stone border border-brand-stone/60 text-white px-4 py-2 text-sm tracking-wider uppercase transition-colors">
+          <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span class="hidden sm:inline">Bag</span>
+          <span id="cart-counter" class="bg-brand-gold text-brand-black font-bold text-xs px-2 py-0.5 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-brand-stone/30">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=2000&q=80" alt="Bespoke Suit Luxury Craftsmanship" class="w-full h-full object-cover object-top opacity-30 filter brightness-90">
+      <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/60 to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto text-center px-4 py-16">
+      <span class="text-brand-gold uppercase tracking-[0.35em] text-xs font-semibold mb-4 inline-block">Sartorial Precision & Fine Cobbling</span>
+      <h1 class="heading-font text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
+        MASTERED TAILORING.<br/><span class="italic font-normal text-brand-gold">PERFECT STRIDE.</span>
+      </h1>
+      <p class="max-w-2xl mx-auto text-zinc-300 text-base sm:text-lg mb-10 font-light leading-relaxed">
+        Crafted from Super 150s Italian wool and full-grain Blake-stitched calfskin leather. Designed for modern connoisseurs who accept no compromises.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#catalog" onclick="filterCatalog('suits')" class="w-full sm:w-auto px-8 py-4 bg-brand-gold hover:bg-brand-goldHover text-brand-black font-semibold text-xs uppercase tracking-widest transition-all">Explore The Suits</a>
+        <a href="#catalog" onclick="filterCatalog('shoes')" class="w-full sm:w-auto px-8 py-4 border border-zinc-500 hover:border-brand-gold hover:text-brand-gold text-white font-semibold text-xs uppercase tracking-widest transition-all">Artisanal Shoes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG FILTER & SEARCH BAR -->
+  <section id="catalog" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-brand-stone/40">
+      <div>
+        <h2 class="heading-font text-3xl font-bold text-white tracking-wide">The Permanent Collection</h2>
+        <p class="text-zinc-400 text-sm mt-1">Select an atelier category or search bespoke silhouettes</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <!-- Category Buttons -->
+        <div class="inline-flex p-1 bg-brand-charcoal border border-brand-stone rounded-none">
+          <button onclick="filterCatalog('all')" id="btn-cat-all" class="cat-btn px-4 py-2 text-xs uppercase tracking-wider font-semibold bg-brand-gold text-brand-black transition">All</button>
+          <button onclick="filterCatalog('suits')" id="btn-cat-suits" class="cat-btn px-4 py-2 text-xs uppercase tracking-wider font-semibold text-zinc-300 hover:text-white transition">Suits</button>
+          <button onclick="filterCatalog('shoes')" id="btn-cat-shoes" class="cat-btn px-4 py-2 text-xs uppercase tracking-wider font-semibold text-zinc-300 hover:text-white transition">Footwear</button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative">
+          <input type="text" id="catalog-search" oninput="handleSearch(this.value)" placeholder="Search cut, color, leather..." class="bg-brand-charcoal border border-brand-stone text-sm text-white px-4 py-2 pl-9 focus:outline-none focus:border-brand-gold w-64 placeholder-zinc-500">
+          <svg class="w-4 h-4 text-zinc-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 py-12">
+      <!-- Populated via Javascript -->
+    </div>
+  </section>
+
+  <!-- ATELIER CRAFTSMANSHIP SPOTLIGHT -->
+  <section id="bespoke" class="border-t border-brand-stone/40 bg-brand-charcoal/50 py-20 my-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="text-brand-gold tracking-[0.3em] uppercase text-xs font-semibold">Unrivaled Construction</span>
+        <h3 class="heading-font text-3xl sm:text-4xl font-bold text-white mt-2 mb-6">Full Canvas Floating Chests & Goodyear Welted Soles</h3>
+        <p class="text-zinc-300 leading-relaxed mb-6 font-light">
+          Every Aurelius suit is assembled with a traditional horsehair floating canvas that drapes and molds to the wearer's physique over time. Our shoes are handcrafted in small batches using premium French Box Calf and Tuscan vegetable-tanned outsoles designed to be resoled for decades.
+        </p>
+        <div class="grid grid-cols-3 gap-6 pt-4 border-t border-brand-stone">
+          <div>
+            <div class="text-2xl font-bold text-brand-gold heading-font">Super 150s</div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wider mt-1">Merino Wool</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-brand-gold heading-font">38 Hours</div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wider mt-1">Hand Stitching</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold text-brand-gold heading-font">100%</div>
+            <div class="text-xs text-zinc-400 uppercase tracking-wider mt-1">Italian Leather</div>
+          </div>
+        </div>
+      </div>
+      <div class="relative">
+        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=1000&q=80" alt="Handcrafted Oxford Shoes Leather Craft" class="w-full h-[420px] object-cover border border-brand-stone/60 shadow-2xl">
+        <div class="absolute -bottom-6 -left-6 bg-brand-black p-5 border border-brand-gold/60 max-w-xs hidden sm:block">
+          <p class="text-xs text-brand-gold font-semibold uppercase tracking-wider">Certified Provenance</p>
+          <p class="text-xs text-zinc-300 mt-1">Directly hand-cobbled in Florence, Italy and Savile Row standard tailored.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-brand-stone/40 bg-brand-black py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 border border-brand-gold flex items-center justify-center text-brand-gold font-bold heading-font text-lg">A</div>
+          <span class="heading-font text-xl font-bold tracking-widest text-white">AURELIUS</span>
+        </div>
+        <p class="text-zinc-400 text-xs leading-relaxed">
+          The international standard for tailored two-piece & three-piece suits, tuxedos, and artisanal dress shoes.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-semibold tracking-widest uppercase text-white mb-4">Sartorial Lines</h4>
+        <ul class="text-xs text-zinc-400 space-y-2.5">
+          <li><a href="#catalog" onclick="filterCatalog('suits')" class="hover:text-brand-gold transition-colors">Double-Breasted Wool Suits</a></li>
+          <li><a href="#catalog" onclick="filterCatalog('suits')" class="hover:text-brand-gold transition-colors">Black-Tie Tuxedos</a></li>
+          <li><a href="#catalog" onclick="filterCatalog('shoes')" class="hover:text-brand-gold transition-colors">Cap-Toe Oxford Shoes</a></li>
+          <li><a href="#catalog" onclick="filterCatalog('shoes')" class="hover:text-brand-gold transition-colors">Penny Loafers & Monkstraps</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-semibold tracking-widest uppercase text-white mb-4">Client Concierge</h4>
+        <ul class="text-xs text-zinc-400 space-y-2.5">
+          <li><a href="#" class="hover:text-brand-gold transition-colors">Made-to-Measure Booking</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition-colors">Sizing & Fitting Guide</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition-colors">Shipping & Returns Policy</a></li>
+          <li><a href="#" class="hover:text-brand-gold transition-colors">Shoe Care & Restoration</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-semibold tracking-widest uppercase text-white mb-4">Secured Payments</h4>
+        <p class="text-xs text-zinc-400 mb-3">Protected with 256-bit SSL encryption powered by Flutterwave Multi-Currency rails.</p>
+        <div class="flex items-center gap-2 text-zinc-400 text-xs">
+          <span class="bg-brand-charcoal px-2.5 py-1 border border-brand-stone/60">USD</span>
+          <span class="bg-brand-charcoal px-2.5 py-1 border border-brand-stone/60">NGN</span>
+          <span class="bg-brand-charcoal px-2.5 py-1 border border-brand-stone/60">GBP</span>
+          <span class="bg-brand-charcoal px-2.5 py-1 border border-brand-stone/60">EUR</span>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-8 border-t border-brand-stone/30 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500">
+      <p>&copy; 2025 Aurelius Sartorial Atelier. All rights reserved.</p>
+      <p class="mt-2 sm:mt-0">Powered by Flutterwave & Supabase Cloud Integration</p>
+    </div>
+  </footer>
+
+  <!-- SHOPPING CART SLIDE-OVER DRAWER -->
+  <div id="cart-drawer-backdrop" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden transition-opacity" onclick="toggleCartDrawer(false)"></div>
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[480px] bg-brand-charcoal border-l border-brand-stone z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <!-- Header -->
+    <div class="p-6 border-b border-brand-stone flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <h3 class="heading-font text-lg font-bold text-white tracking-wider">YOUR SARTORIAL BAG</h3>
+        <span id="drawer-item-count" class="text-xs bg-brand-stone px-2 py-0.5 text-brand-gold rounded-full">0 items</span>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="text-zinc-400 hover:text-white p-2">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Items List -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-6">
+      <!-- Items dynamically injected -->
+    </div>
+
+    <!-- Checkout Drawer Footer -->
+    <div class="p-6 border-t border-brand-stone bg-brand-black space-y-4">
+      <div class="flex justify-between text-sm">
+        <span class="text-zinc-400">Subtotal</span>
+        <span id="cart-subtotal" class="font-bold text-white">$0.00</span>
+      </div>
+      <div class="flex justify-between text-xs text-zinc-500">
+        <span>Delivery & Tailoring Insurance</span>
+        <span>Calculated at checkout</span>
+      </div>
+      <div class="pt-2">
+        <button onclick="openCheckoutModal()" id="btn-proceed-checkout" disabled class="w-full py-4 bg-brand-gold hover:bg-brand-goldHover disabled:bg-zinc-700 disabled:cursor-not-allowed text-brand-black font-semibold text-xs tracking-widest uppercase transition-colors flex items-center justify-center gap-2">
+          <span>Proceed To Flutterwave Checkout</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-brand-charcoal border border-brand-stone max-w-lg w-full p-6 sm:p-8 relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-zinc-400 hover:text-white">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <span class="text-brand-gold text-xs font-semibold uppercase tracking-widest">Aurelius Atelier Delivery</span>
+      <h3 class="heading-font text-2xl font-bold text-white mt-1 mb-6">Complete Bespoke Order</h3>
+
+      <form id="checkout-form" onsubmit="triggerFlutterwavePayment(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-zinc-300 mb-1">Full Name *</label>
+          <input type="text" id="cust-name" required placeholder="Lord Adegboye Desmond" class="w-full bg-brand-black border border-brand-stone text-sm text-white px-3.5 py-2.5 focus:border-brand-gold focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-zinc-300 mb-1">Email Address (Order Confirmation) *</label>
+          <input type="email" id="cust-email" required placeholder="adegboye@example.com" class="w-full bg-brand-black border border-brand-stone text-sm text-white px-3.5 py-2.5 focus:border-brand-gold focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-zinc-300 mb-1">Phone Number *</label>
+          <input type="tel" id="cust-phone" required placeholder="+234 801 234 5678" class="w-full bg-brand-black border border-brand-stone text-sm text-white px-3.5 py-2.5 focus:border-brand-gold focus:outline-none">
+        </div>
+
+        <div>
+          <label class="block text-xs uppercase tracking-wider text-zinc-300 mb-1">Delivery Address *</label>
+          <textarea id="cust-address" rows="2" required placeholder="Penthouse 4B, Victoria Island, Lagos" class="w-full bg-brand-black border border-brand-stone text-sm text-white px-3.5 py-2.5 focus:border-brand-gold focus:outline-none"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-zinc-300 mb-1">Payment Currency</label>
+            <select id="checkout-currency" onchange="updatePayButtonCurrency()" class="w-full bg-brand-black border border-brand-stone text-sm text-white px-3 py-2.5 focus:border-brand-gold focus:outline-none">
+              <option value="USD">USD ($)</option>
+              <option value="NGN">NGN (₦)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs uppercase tracking-wider text-zinc-300 mb-1">Total Payable</label>
+            <div id="checkout-modal-total" class="h-10 flex items-center px-3.5 bg-brand-black border border-brand-stone/60 text-brand-gold font-bold text-sm">
+              $0.00
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-brand-black/50 border border-brand-stone/50 text-xs text-zinc-400 space-y-1">
+          <p class="font-medium text-zinc-300">✓ 100% Encrypted Checkout via Flutterwave</p>
+          <p>Orders are dispatched through DHL Express with real-time tracking.</p>
+        </div>
+
+        <button type="submit" id="btn-submit-payment" class="w-full py-4 bg-brand-gold hover:bg-brand-goldHover text-brand-black font-bold text-xs uppercase tracking-widest transition-all mt-4">
+          Pay Now with Flutterwave
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-brand-stone border border-brand-gold/60 text-white px-5 py-3.5 shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <div id="toast-icon" class="text-brand-gold">✓</div>
+    <div id="toast-message" class="text-xs tracking-wider">Item added to bag</div>
+  </div>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    // -------------------------------------------------------------
+    // CONFIGURATION (REPLACE WITH YOUR LIVE FLUTTERWAVE PUBLIC KEY)
+    // -------------------------------------------------------------
+    const FLUTTERWAVE_PUBLIC_KEY = 'FLWPUBK_TEST-e0874c9339e144577884784a0d8e8c8b-X';
+
+    // Optional Supabase connection (Leave blank if not using Supabase database)
+    const SUPABASE_URL = '';
+    const SUPABASE_ANON_KEY = '';
+
+    let supabaseClient = null;
+
+    // Default luxury catalog (Suits and Shoes)
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 'suit-01',
+        category: 'suits',
+        name: 'The Mayfair Charcoal Three-Piece',
+        subtitle: 'Super 150s Merino Wool with Double-Breasted Waistcoat',
+        priceUSD: 1250,
+        sizes: ['38R', '40R', '42R', '44R', '46L'],
+        image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80',
+        description: 'Hand-shaped lapels, horn buttons, floating horsehair canvas.'
+      },
+      {
+        id: 'suit-02',
+        category: 'suits',
+        name: 'Midnight Navy Silk-Satin Tuxedo',
+        subtitle: 'Peak Grosgrain Lapel Black-Tie Attire',
+        priceUSD: 1480,
+        sizes: ['38R', '40R', '42R', '44R'],
+        image: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80',
+        description: 'Single-button closure tailored from high-twist Italian barathea wool.'
+      },
+      {
+        id: 'suit-03',
+        category: 'suits',
+        name: 'Vicugna Sand Double-Breasted Suit',
+        subtitle: 'Unstructured Neapolitan Shoulder & Mother-of-Pearl Trims',
+        priceUSD: 1390,
+        sizes: ['40R', '42R', '44R'],
+        image: 'https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=800&q=80',
+        description: 'Bespoke drape engineered for seasonal galas and warm-weather prestige.'
+      },
+      {
+        id: 'shoe-01',
+        category: 'shoes',
+        name: 'The Imperial Cap-Toe Oxford',
+        subtitle: 'Hand-Burnished French Box Calfskin with Leather Sole',
+        priceUSD: 590,
+        sizes: ['EU 41', 'EU 42', 'EU 43', 'EU 44', 'EU 45'],
+        image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=800&q=80',
+        description: 'Goodyear-welted in Northamptonshire; channeled sole with brass nails.'
+      },
+      {
+        id: 'shoe-02',
+        category: 'shoes',
+        name: 'Firenze Double Monk Strap',
+        subtitle: 'Museum Burgundy Calf with Polished Brass Buckles',
+        priceUSD: 640,
+        sizes: ['EU 40', 'EU 41', 'EU 42', 'EU 43', 'EU 44'],
+        image: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&w=800&q=80',
+        description: 'Artisanal hand-patina finish with beveled waist and stacked heel.'
+      },
+      {
+        id: 'shoe-03',
+        category: 'shoes',
+        name: 'Sartorial Venetian Tassel Loafer',
+        subtitle: 'Espresso Suede with Hand-Braided Apron Stitches',
+        priceUSD: 520,
+        sizes: ['EU 41', 'EU 42', 'EU 43', 'EU 44', 'EU 45'],
+        image: 'https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?auto=format&fit=crop&w=800&q=80',
+        description: 'Blake-rapid construction offering unrivaled day-to-evening flexibility.'
+      }
+    ];
+
+    let state = {
+      products: [...DEFAULT_PRODUCTS],
+      activeCategory: 'all',
+      searchQuery: '',
+      cart: []
+    };
+
+    // -------------------------------------------------------------
+    // SUPABASE INITIALIZATION
+    // -------------------------------------------------------------
+    function initSupabase() {
+      if (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase) {
+        try {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          fetchProductsFromSupabase();
+        } catch (e) {
+          console.warn("Supabase connection notice:", e.message);
+        }
+      }
+    }
+
+    async function fetchProductsFromSupabase() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.from('products').select('*');
+        if (!error && data && data.length > 0) {
+          state.products = data;
+          renderCatalog();
+        }
+      } catch (err) {
+        console.warn('Using local fallback collection:', err.message);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // CATALOG RENDERING & FILTERING
+    // -------------------------------------------------------------
+    function renderCatalog() {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '';
+
+      const filtered = state.products.filter(item => {
+        const matchCategory = state.activeCategory === 'all' || item.category === state.activeCategory;
+        const matchSearch = item.name.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                            item.subtitle.toLowerCase().includes(state.searchQuery.toLowerCase());
+        return matchCategory && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-zinc-400">
+            <p class="heading-font text-xl text-white mb-2">No Sartorial Pieces Found</p>
+            <p class="text-xs">Adjust your search term or select another category filter.</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "group bg-brand-charcoal border border-brand-stone hover:border-brand-gold/60 transition-all duration-300 flex flex-col justify-between";
+
+        const sizeOptions = p.sizes.map(s => `<option value="${s}">${s}</option>`).join('');
+
+        card.innerHTML = `
+          <div class="relative overflow-hidden aspect-[4/5] bg-brand-black">
+            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700">
+            <span class="absolute top-3 left-3 bg-brand-black/90 border border-brand-stone/60 text-brand-gold uppercase text-[10px] tracking-widest font-semibold px-2.5 py-1">
+              ${p.category.toUpperCase()}
+            </span>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-baseline justify-between gap-2 mb-2">
+                <h4 class="heading-font text-lg font-bold text-white tracking-wide group-hover:text-brand-gold transition-colors">${p.name}</h4>
+                <span class="text-brand-gold font-bold text-base">$${p.priceUSD.toLocaleString()}</span>
+              </div>
+              <p class="text-xs text-zinc-400 mb-4 line-clamp-2">${p.subtitle}</p>
+            </div>
+
+            <div class="space-y-4 pt-4 border-t border-brand-stone/60">
+              <div class="flex items-center justify-between text-xs">
+                <label for="size-${p.id}" class="text-zinc-400 uppercase tracking-wider">Select Size</label>
+                <select id="size-${p.id}" class="bg-brand-black border border-brand-stone text-xs text-white px-2.5 py-1 focus:border-brand-gold focus:outline-none">
+                  ${sizeOptions}
+                </select>
+              </div>
+
+              <button onclick="addToCart('${p.id}')" class="w-full py-3 bg-brand-stone hover:bg-brand-gold hover:text-brand-black text-white text-xs font-semibold uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                <span>Add To Bag</span>
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCategory(category) {
+      filterCatalog(category);
+    }
+
+    function filterCatalog(category) {
+      state.activeCategory = category;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.classList.remove('bg-brand-gold', 'text-brand-black');
+        btn.classList.add('text-zinc-300');
+      });
+
+      const activeBtn = document.getElementById(`btn-cat-${category}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-zinc-300');
+        activeBtn.classList.add('bg-brand-gold', 'text-brand-black');
+      }
+      renderCatalog();
+    }
+
+    function handleSearch(val) {
+      state.searchQuery = val;
+      renderCatalog();
+    }
+
+    // -------------------------------------------------------------
+    // SHOPPING BAG MANAGEMENT
+    // -------------------------------------------------------------
+    function addToCart(productId) {
+      const product = state.products.find(p => p.id === productId);
+      if (!product) return;
+
+      const sizeSelect = document.getElementById(`size-${productId}`);
+      const selectedSize = sizeSelect ? sizeSelect.value : product.sizes[0];
+
+      const existingIndex = state.cart.findIndex(item => item.product.id === productId && item.size === selectedSize);
+
+      if (existingIndex > -1) {
+        state.cart[existingIndex].qty += 1;
+      } else {
+        state.cart.push({
+          product: product,
+          size: selectedSize,
+          qty: 1
+        });
+      }
+
+      updateCartUI();
+      showToast(`Added: ${product.name} (${selectedSize})`);
+    }
+
+    function updateCartQty(index, delta) {
+      if (!state.cart[index]) return;
+      state.cart[index].qty += delta;
+      if (state.cart[index].qty <= 0) {
+        state.cart.splice(index, 1);
+      }
+      updateCartUI();
+    }
+
+    function removeCartItem(index) {
+      state.cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function calculateCartSubtotal() {
+      return state.cart.reduce((sum, item) => sum + (item.product.priceUSD * item.qty), 0);
+    }
+
+    function updateCartUI() {
+      const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      const subtotal = calculateCartSubtotal();
+
+      document.getElementById('cart-counter').innerText = totalItems;
+      document.getElementById('drawer-item-count').innerText = `${totalItems} ${totalItems === 1 ? 'item' : 'items'}`;
+      document.getElementById('cart-subtotal').innerText = `$${subtotal.toLocaleString()}.00`;
+
+      const checkoutBtn = document.getElementById('btn-proceed-checkout');
+      checkoutBtn.disabled = state.cart.length === 0;
+
+      const container = document.getElementById('cart-items-container');
+      container.innerHTML = '';
+
+      if (state.cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-64 flex flex-col items-center justify-center text-center text-zinc-500">
+            <svg class="w-12 h-12 mb-3 text-brand-stone" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            <p class="heading-font text-white text-base">Your Bag Is Empty</p>
+            <p class="text-xs text-zinc-400 mt-1">Discover handcrafted suits and shoes above.</p>
+          </div>
+        `;
+        return;
+      }
+
+      state.cart.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = "flex gap-4 border-b border-brand-stone/60 pb-6";
+        row.innerHTML = `
+          <img src="${item.product.image}" alt="${item.product.name}" class="w-20 h-24 object-cover border border-brand-stone">
+          <div class="flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start">
+                <h5 class="text-xs font-bold uppercase tracking-wider text-white">${item.product.name}</h5>
+                <button onclick="removeCartItem(${index})" class="text-zinc-500 hover:text-red-400 text-xs ml-2">✕</button>
+              </div>
+              <p class="text-xs text-brand-gold mt-0.5">Size: ${item.size}</p>
+              <p class="text-xs text-zinc-400 mt-1">$${item.product.priceUSD.toLocaleString()} each</p>
+            </div>
+
+            <div class="flex items-center justify-between mt-3">
+              <div class="flex items-center border border-brand-stone">
+                <button onclick="updateCartQty(${index}, -1)" class="px-2 py-0.5 text-zinc-300 hover:text-brand-gold text-xs">-</button>
+                <span class="px-3 py-0.5 text-xs text-white">${item.qty}</span>
+                <button onclick="updateCartQty(${index}, 1)" class="px-2 py-0.5 text-zinc-300 hover:text-brand-gold text-xs">+</button>
+              </div>
+              <span class="text-xs font-bold text-white">$${(item.product.priceUSD * item.qty).toLocaleString()}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function toggleCartDrawer(open) {
+      const drawer = document.getElementById('cart-drawer');
+      const backdrop = document.getElementById('cart-drawer-backdrop');
+      if (open) {
+        backdrop.classList.remove('hidden');
+        setTimeout(() => drawer.classList.remove('translate-x-full'), 10);
+      } else {
+        drawer.classList.add('translate-x-full');
+        setTimeout(() => backdrop.classList.add('hidden'), 300);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // FLUTTERWAVE CHECKOUT & SUPABASE PERSISTENCE
+    // -------------------------------------------------------------
+    function openCheckoutModal() {
+      toggleCartDrawer(false);
+      const subtotal = calculateCartSubtotal();
+      document.getElementById('checkout-modal-total').innerText = `$${subtotal.toLocaleString()}.00`;
+      document.getElementById('checkout-modal').classList.remove('hidden');
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById('checkout-modal').classList.add('hidden');
+    }
+
+    function updatePayButtonCurrency() {
+      const currency = document.getElementById('checkout-currency').value;
+      const subtotalUSD = calculateCartSubtotal();
+      let displayRate = subtotalUSD;
+
+      if (currency === 'NGN') displayRate = subtotalUSD * 1550;
+      if (currency === 'GBP') displayRate = subtotalUSD * 0.78;
+
+      document.getElementById('checkout-modal-total').innerText =
+        `${currency === 'NGN' ? '₦' : currency === 'GBP' ? '£' : '$'}${Math.round(displayRate).toLocaleString()}`;
+    }
+
+    async function triggerFlutterwavePayment(e) {
+      e.preventDefault();
+
+      if (state.cart.length === 0) {
+        showToast('Your bag is currently empty.');
+        return;
+      }
+
+      const name = document.getElementById('cust-name').value.trim();
+      const email = document.getElementById('cust-email').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
+      const address = document.getElementById('cust-address').value.trim();
+      const currency = document.getElementById('checkout-currency').value;
+
+      const subtotalUSD = calculateCartSubtotal();
+      let payableAmount = subtotalUSD;
+      if (currency === 'NGN') payableAmount = subtotalUSD * 1550;
+      if (currency === 'GBP') payableAmount = Math.round(subtotalUSD * 0.78);
+
+      const txRef = 'AURELIUS-' + Date.now();
+
+      if (typeof window.FlutterwaveCheckout !== 'function') {
+        alert('Flutterwave SDK is initializing. Please verify network connectivity.');
+        return;
+      }
+
+      closeCheckoutModal();
+
+      window.FlutterwaveCheckout({
+        public_key: FLUTTERWAVE_PUBLIC_KEY,
+        tx_ref: txRef,
+        amount: payableAmount,
+        currency: currency,
+        payment_options: "card,ussd,banktransfer,account",
+        customer: {
+          email: email,
+          phone_number: phone,
+          name: name,
+        },
+        customizations: {
+          title: "Aurelius Sartorial Bespoke",
+          description: `Order payment for ${state.cart.length} tailored luxury item(s)`,
+          logo: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=150&q=80",
+        },
+        callback: async function (paymentData) {
+          await persistOrderToSupabase({
+            customer_name: name,
+            customer_email: email,
+            customer_phone: phone,
+            customer_address: address,
+            amount: payableAmount,
+            currency: currency,
+            flw_ref: paymentData.transaction_id || txRef,
+            items: state.cart.map(i => ({
+              id: i.product.id,
+              name: i.product.name,
+              size: i.size,
+              qty: i.qty,
+              price: i.product.priceUSD
+            }))
+          });
+
+          state.cart = [];
+          updateCartUI();
+          showToast(`Transaction Successful! Ref: ${txRef}`);
+          alert(`Noble greetings ${name},\n\nYour order has been recorded successfully! Transaction reference: ${txRef}.\n\nOur master tailor will review your measurements and provide DHL express tracking via ${email}.`);
+        },
+        onclose: function() {
+          showToast('Payment modal closed');
+        }
+      });
+    }
+
+    async function persistOrderToSupabase(orderRecord) {
+      if (!supabaseClient) return;
+      try {
+        await supabaseClient.from('orders').insert([orderRecord]);
+      } catch (err) {
+        console.error("Supabase write note:", err);
+      }
+    }
+
+    // -------------------------------------------------------------
+    // UTILITIES
+    // -------------------------------------------------------------
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').innerText = message;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    function toggleMobileNav() {
+      showToast('Use the top category tabs to browse suits & shoes');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSupabase();
+      renderCatalog();
+      updateCartUI();
+    });
+  </script>
+</body>
+</html>
